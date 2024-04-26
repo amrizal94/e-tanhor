@@ -1,0 +1,58 @@
+version: '39'
+services:
+  web:
+    image: php:7.2.5-apache
+    container_name: php7.2.5-apache
+    ports:
+      - "80:80"
+    volumes:
+      - ./web:/var/www/html/
+  
+    command:
+      - /bin/sh
+      - -c
+      - |
+          docker-php-ext-install mysqli 
+          echo "extension installed.....starting php-fpm........................................"
+          php-fpm
+          a2enmod rewrite
+          apache2-foreground
+    depends_on:
+      - db
+  db:
+    image: mariadb:10.6
+    container_name: mariadb10.6
+    environment:
+      MARIADB_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MARIADB_DATABASE_FILE: /run/secrets/db_database
+      MARIADB_USER_FILE: /run/secrets/db_user
+      MARIADB_PASSWORD_FILE: /run/secrets/db_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_etanhor:/var/lib/mysql
+    secrets:
+      - db_database
+      - db_password
+      - db_root_password
+      - db_user
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+volumes:
+  db_etanhor:
+      
+secrets:
+  db_database:
+    file: db_database.txt
+  db_password:
+    file: db_password.txt
+  db_root_password:
+    file: db_root_password.txt
+  db_user:
+    file: db_user.txt
