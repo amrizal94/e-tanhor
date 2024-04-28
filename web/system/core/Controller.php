@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CodeIgniter
  *
@@ -36,7 +37,7 @@
  * @since	Version 1.0.0
  * @filesource
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Application Controller Class
@@ -50,7 +51,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @author		EllisLab Dev Team
  * @link		https://codeigniter.com/userguide3/general/controllers.html
  */
-class CI_Controller {
+class CI_Controller
+{
 
 	/**
 	 * Reference to the CI singleton
@@ -65,6 +67,8 @@ class CI_Controller {
 	 * @var	CI_Loader
 	 */
 	public $load;
+	public $user_data;
+	public $data;
 
 	/**
 	 * Class constructor
@@ -73,19 +77,57 @@ class CI_Controller {
 	 */
 	public function __construct()
 	{
-		self::$instance =& $this;
+		self::$instance = &$this;
 
 		// Assign all the class objects that were instantiated by the
 		// bootstrap file (CodeIgniter.php) to local class variables
 		// so that CI can run as one big super object.
-		foreach (is_loaded() as $var => $class)
-		{
-			$this->$var =& load_class($class);
+		foreach (is_loaded() as $var => $class) {
+			$this->$var = &load_class($class);
 		}
 
-		$this->load =& load_class('Loader', 'core');
+		$this->load = &load_class('Loader', 'core');
 		$this->load->initialize();
 		log_message('info', 'Controller Class Initialized');
+
+		if ($this->session->userdata('id') && $this->session->userdata('expired') < time()) {
+			$this->session->unset_userdata('id');
+			$this->session->unset_userdata('expired');
+			$this->session->set_flashdata('message', '
+		    <div class="alert alert-info" role="alert">
+		        Your session is expired!, please login again.
+		    </div>
+		    ');
+			$last_url = $this->router->class;
+			$this->session->set_userdata('last_url', $last_url);
+			redirect('auth');
+		} else {
+			$data = [
+				'expired' => time() + minutes(5),
+			];
+			$this->db->set('last_login', date("Y-m-d H:i:s", now()));
+			$this->db->where('id', $this->session->userdata('id'));
+			$this->db->update('user');
+			$this->session->set_userdata($data);
+		}
+
+		if (!$this->user_data && $this->session->userdata('id')) {
+			$this->load->model('User_model', 'user');
+
+			$this->user_data = $this->user->login($this->session->userdata('id'));
+			$this->data['app_name'] = "E-TANHOR";
+			$this->data['app_sub_name'] = "Indonesia";
+		}
+
+		if (!$this->user_data && $this->router->class != "auth") {
+			$this->session->set_flashdata('message', '
+		    <div class="alert alert-warning" role="alert">
+		        Please login first!
+		    </div>
+		    ');
+
+			redirect('auth');
+		}
 	}
 
 	// --------------------------------------------------------------------
@@ -100,5 +142,4 @@ class CI_Controller {
 	{
 		return self::$instance;
 	}
-
 }
