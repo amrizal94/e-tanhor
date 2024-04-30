@@ -9,6 +9,8 @@ class MasterUser extends CI_Controller
         $this->data['title'] = 'Master ' . $this->data['sub_title'];
         $this->data['user'] = $this->user->user_data($this->session->userdata('id'));
         $this->data['list_users'] = $this->user->list_users($this->data['user']['level_user_id']);
+        $this->data['list_level_user'] = $this->db->get('level_user');
+        $this->data['list_directorate'] = $this->db->get('directorate');
         $this->data['optioncss'] = array('vendor/datatables/dataTables.bootstrap4.min.css');
         $this->data['optionjs'] = array(
             'vendor/datatables/jquery.dataTables.min.js',

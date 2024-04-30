@@ -18,10 +18,6 @@
             <div class="modal-body">
                 <form id="form-add-member" class="p-3" method="post" action="<?= base_url($this->router->class); ?>">
                     <div class="form-group">
-                        <label for="name">Nama Lengkap <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name" name="name">
-                    </div>
-                    <div class="form-group">
                         <label for="username">Username <span class="text-danger">*</span></label>
                         <input type="text" class="form-control" id="username" name="username">
                     </div>
@@ -33,12 +29,26 @@
                         <label for="level_user">Level User <span class="text-danger">*</span></label>
                         <select class="form-control" id="level_user" name="level_user">
                             <option>Level User</option>
+                            <?php
+                            foreach ($list_level_user->result() as $row) {;
+                                if ($row->id == 0) {
+                                    continue;
+                                } ?>
+                                <option value="<?= $row->id; ?>"><?= $row->name; ?></option>
+                            <?php }; ?>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="status_akun">Status Akun <span class="text-danger">*</span></label>
-                        <select class="form-control" id="status_akun" name="status_akun">
-                            <option>Status Akun</option>
+                        <label for="directorate">Directorate <span class="text-danger">*</span></label>
+                        <select class="form-control" id="directorate" name="directorate">
+                            <option>Directorate</option>
+                            <?php
+                            foreach ($list_directorate->result() as $row) {;
+                                if ($row->id == 0) {
+                                    continue;
+                                } ?>
+                                <option value="<?= $row->id; ?>"><?= $row->name; ?></option>
+                            <?php }; ?>
                         </select>
                     </div>
                     <div class="form-group">
@@ -62,7 +72,7 @@
                     <div class="form-group">
                         <label for="kelompok">Kelompok <span class="text-danger">*</span></label>
                         <select class="form-control" id="kelompok" name="kelompok">
-                            <option>Kelompok</option>
+                            <option>Level User</option>
                         </select>
                     </div>
                 </form>

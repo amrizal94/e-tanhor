@@ -1,7 +1,5 @@
 <?php
 
-use PhpParser\Node\Expr\FuncCall;
-
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class User_model extends CI_Model

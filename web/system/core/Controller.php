@@ -115,7 +115,7 @@ class CI_Controller
 			);
 			$this->db->where('id', $this->session->userdata('id'));
 			$this->db->update('user', $data);
-			$this->session->set_userdata(['expired' => time() + minutes(5)]);
+			$this->session->set_userdata(['expired' => time() + hours(1)]);
 		}
 
 		if (!$this->user_data && $this->session->userdata('id')) {
