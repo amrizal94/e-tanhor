@@ -6,8 +6,7 @@ class Dasboard extends CI_Controller
     public function index()
     {
         $this->data['title'] = 'Dasboard';
-        $this->data['user'] = $this->user_data;
-        $this->data['level_user'] = $this->user->level($this->data['user']['id']);
+        $this->data['user'] = $this->user->user_data($this->session->userdata('id'));
         $this->data['optioncss'] = array('vendor/datatables/dataTables.bootstrap4.min.css');
         $this->data['optionjs'] = array(
             'vendor/datatables/jquery.dataTables.min.js',

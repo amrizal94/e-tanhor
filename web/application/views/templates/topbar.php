@@ -23,7 +23,7 @@
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="d-flex flex-column">
                             <div class="mr-2 d-none d-lg-inline text-gray-600"><?= $user['username']; ?></div>
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $level_user['name']; ?></span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $user['level_user']; ?></span>
                         </div>
 
                         <img class="img-profile rounded-circle" src="<?= base_url('assets/'); ?>img/profile/default.jpg">

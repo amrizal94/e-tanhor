@@ -7,7 +7,7 @@ class Auth extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ($this->user_data && $this->router->method != 'logout') {
+        if ($this->session->userdata('id') && $this->router->method != 'logout') {
             redirect('dasboard');
         }
     }
@@ -42,7 +42,7 @@ class Auth extends CI_Controller
                 $this->session->set_flashdata('username', $input['username']);
                 $this->session->set_flashdata('message', '
                 <div class="alert alert-warning" role="alert">
-                your account is deactivated!
+                your account is inactive!
                 </div>');
                 redirect('auth');
             }
@@ -54,6 +54,9 @@ class Auth extends CI_Controller
                 </div>');
                 redirect('auth');
             }
+            $this->db->set('is_login', 1);
+            $this->db->where('id', $user['id']);
+            $this->db->update('user');
             $this->session->set_userdata([
                 'id' => $user['id']
             ]);
@@ -163,6 +166,12 @@ class Auth extends CI_Controller
 
     public function logout()
     {
+        $data = array(
+            'last_logout' =>  date("Y-m-d H:i:s", now()),
+            'is_login' => 0,
+        );
+        $this->db->where('id', $this->session->userdata('id'));
+        $this->db->update('user', $data);
         $this->session->unset_userdata('id');
         $this->session->unset_userdata('expired');
         $this->session->unset_userdata('last_url');

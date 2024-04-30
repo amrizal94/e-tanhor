@@ -91,6 +91,13 @@ class CI_Controller
 		log_message('info', 'Controller Class Initialized');
 
 		if ($this->session->userdata('id') && $this->session->userdata('expired') < time()) {
+			$data = array(
+				'last_logout' =>  date("Y-m-d H:i:s", now()),
+				'is_login' => 0,
+			);
+			$this->db->where('id', $this->session->userdata('id'));
+			$this->db->update('user', $data);
+
 			$this->session->unset_userdata('id');
 			$this->session->unset_userdata('expired');
 			$this->session->set_flashdata('message', '
@@ -102,24 +109,21 @@ class CI_Controller
 			$this->session->set_userdata('last_url', $last_url);
 			redirect('auth');
 		} else {
-			$data = [
-				'expired' => time() + minutes(5),
-			];
-			$this->db->set('last_login', date("Y-m-d H:i:s", now()));
+			$data = array(
+				'last_login' =>  date("Y-m-d H:i:s", now()),
+				'ip_address' => $_SERVER['REMOTE_ADDR'],
+			);
 			$this->db->where('id', $this->session->userdata('id'));
-			$this->db->update('user');
-			$this->session->set_userdata($data);
+			$this->db->update('user', $data);
+			$this->session->set_userdata(['expired' => time() + minutes(5)]);
 		}
 
 		if (!$this->user_data && $this->session->userdata('id')) {
 			$this->load->model('User_model', 'user');
-
-			$this->user_data = $this->user->login($this->session->userdata('id'));
 			$this->data['app_name'] = "E-TANHOR";
-			$this->data['app_sub_name'] = "Indonesia";
 		}
 
-		if (!$this->user_data && $this->router->class != "auth") {
+		if (!$this->session->userdata('id') && $this->router->class != "auth") {
 			$this->session->set_flashdata('message', '
 		    <div class="alert alert-warning" role="alert">
 		        Please login first!

@@ -7,7 +7,7 @@
             <i class="fas fa-laugh-wink"></i>
         </div>
         <div class="sidebar-brand-text mx-3"><?= $app_name; ?>
-            <span class="small"><?= $app_sub_name; ?></span>
+            <span class="small"><?= $user['directorate']; ?></span>
         </div>
     </a>
 
