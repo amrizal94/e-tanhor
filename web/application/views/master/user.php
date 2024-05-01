@@ -109,7 +109,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table table-bordered display nowrap" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>Username</th>
@@ -166,7 +166,24 @@
                                         <span class="text">inactive</span>
                                         </div>' ?></td>
                             <td><?= $row->created_at; ?></td>
-                            <td><?= $row->username; ?></td>
+                            <td><a class="nav-link dropdown-toggle" href="#" id="tableDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <svg class="fa-fw" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                                        <path d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z" />
+                                    </svg>
+                                </a>
+                                <!-- Dropdown - User Information -->
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="tableDropdown">
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-edit fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Edit
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fas fa-trash fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Hapus
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
                     <?php }; ?>
                 </tbody>

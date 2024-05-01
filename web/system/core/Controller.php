@@ -118,8 +118,9 @@ class CI_Controller
 			$this->session->set_userdata(['expired' => time() + hours(1)]);
 		}
 
-		if (!$this->user_data && $this->session->userdata('id')) {
+		if ($this->session->userdata('id')) {
 			$this->load->model('User_model', 'user');
+			$this->data['user'] = $this->user->user_data($this->session->userdata('id'));
 			$this->data['app_name'] = "E-TANHOR";
 		}
 

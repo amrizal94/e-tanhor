@@ -1,7 +1,9 @@
 // Call the dataTables jQuery plugin
-$(document).ready(function() {
-  $('#dataTable').DataTable();
-});
-$(document).ready(function() {
-  $('#detailTable').DataTable();
+$(document).ready(function () {
+  $("#dataTable").DataTable({
+    responsive: true,
+    rowReorder: {
+      selector: "td:nth-child(2)",
+    },
+  });
 });

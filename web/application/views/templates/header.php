@@ -18,6 +18,7 @@
     <!-- Custom styles for this template-->
     <link href="<?= base_url('assets/'); ?>css/sb-admin-2.min.css" rel="stylesheet">
 
+
     <?php if (isset($optioncss)) {
         foreach ($optioncss as $css) {
     ?>
@@ -25,7 +26,13 @@
     <?php
         }
     } ?>
-
+    <?php if (isset($cdncss)) {
+        foreach ($cdncss as $css) {
+    ?>
+            <link href="<?= $css; ?>" rel="stylesheet">
+    <?php
+        }
+    } ?>
 </head>
 
 <body id="page-top">

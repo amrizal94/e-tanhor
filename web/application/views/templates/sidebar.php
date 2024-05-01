@@ -37,45 +37,21 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link py-0" href="<?= base_url('mastermasjid'); ?>">
+        <a class="nav-link py-0" href="<?= base_url('masterpolda'); ?>">
             <i class="fas fa-fw fa-table"></i>
-            <span>Master Masjid</span></a>
+            <span>Master Polda</span></a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link py-0" href="<?= base_url('masterdaerah'); ?>">
+        <a class="nav-link py-0" href="<?= base_url('masterpolres'); ?>">
             <i class="fas fa-fw fa-table"></i>
-            <span>Master Daerah</span></a>
+            <span>Master Polres</span></a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link py-0" href="<?= base_url('masterdesa'); ?>">
+        <a class="nav-link py-0" href="<?= base_url('masterpolsek'); ?>">
             <i class="fas fa-fw fa-table"></i>
-            <span>Master Desa</span></a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link py-0" href="<?= base_url('masterkelompok'); ?>">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Master Kelompok</span></a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link py-0" href="<?= base_url('masterwilayahpengurus'); ?>">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Master Wilayah Pengurus</span></a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link py-0" href="<?= base_url('masterjenispengurus'); ?>">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Master Jenis Pengurus</span></a>
-    </li>
-
-    <li class="nav-item">
-        <a class="nav-link py-0" href="<?= base_url('mastermubaligh'); ?>">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Master Mubaligh</span></a>
+            <span>Master Polsek</span></a>
     </li>
 
     <li class="nav-item">
