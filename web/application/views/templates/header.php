@@ -17,22 +17,27 @@
 
     <!-- Custom styles for this template-->
     <link href="<?= base_url('assets/'); ?>css/sb-admin-2.min.css" rel="stylesheet">
-
-
     <?php if (isset($optioncss)) {
-        foreach ($optioncss as $css) {
-    ?>
-            <link href="<?= base_url('assets/') . $css; ?>" rel="stylesheet">
-    <?php
-        }
-    } ?>
-    <?php if (isset($cdncss)) {
-        foreach ($cdncss as $css) {
+        foreach ($optioncss as $css) :
     ?>
             <link href="<?= $css; ?>" rel="stylesheet">
     <?php
-        }
+        endforeach;
     } ?>
+    <!-- Bootstrap core JavaScript-->
+    <script src="<?= base_url('assets/'); ?>vendor/jquery/jquery.min.js"></script>
+    <script src="<?= base_url('assets/'); ?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="<?= base_url('assets/'); ?>vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="<?= base_url('assets/'); ?>js/sb-admin-2.min.js"></script>
+
+    <script type="text/javascript">
+        var site_url = <?php echo json_encode(site_url()) ?>;
+    </script>
+
 </head>
 
 <body id="page-top">

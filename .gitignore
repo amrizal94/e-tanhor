@@ -5,3 +5,4 @@ db_*.txt
 data
 
 wilayah-nusantara/.pnpm-store
+web/application/cache
