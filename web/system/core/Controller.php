@@ -90,7 +90,7 @@ class CI_Controller
 		$this->load->initialize();
 		log_message('info', 'Controller Class Initialized');
 
-		if ($this->session->userdata('id') && $this->session->userdata('expired') < time()) {
+		if ($this->session->userdata('id') && $this->session->userdata('expired') < time() && !$this->input->is_ajax_request()) {
 			$data = array(
 				'last_logout' =>  date("Y-m-d H:i:s", now()),
 				'is_login' => 0,
@@ -108,14 +108,14 @@ class CI_Controller
 			$last_url = $this->router->class;
 			$this->session->set_userdata('last_url', $last_url);
 			redirect('auth');
-		} else {
+		} elseif (!$this->input->is_ajax_request()) {
 			$data = array(
 				'last_login' =>  date("Y-m-d H:i:s", now()),
 				'ip_address' => $_SERVER['REMOTE_ADDR'],
 			);
 			$this->db->where('id', $this->session->userdata('id'));
 			$this->db->update('user', $data);
-			$this->session->set_userdata(['expired' => time() + hours(1)]);
+			$this->session->set_userdata(['expired' => time() + minutes(1)]);
 		}
 
 		if ($this->session->userdata('id')) {
