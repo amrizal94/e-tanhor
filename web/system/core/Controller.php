@@ -89,7 +89,7 @@ class CI_Controller
 		$this->load = &load_class('Loader', 'core');
 		$this->load->initialize();
 		log_message('info', 'Controller Class Initialized');
-
+		$this->data['extra_time'] = minutes(1);
 		if ($this->session->userdata('id') && $this->session->userdata('expired') < time() && !$this->input->is_ajax_request()) {
 			$data = array(
 				'last_logout' =>  date("Y-m-d H:i:s", now()),
@@ -115,7 +115,7 @@ class CI_Controller
 			);
 			$this->db->where('id', $this->session->userdata('id'));
 			$this->db->update('user', $data);
-			$this->session->set_userdata(['expired' => time() + minutes(1)]);
+			$this->session->set_userdata(['expired' => time() + $this->data['extra_time']]);
 		}
 
 		if ($this->session->userdata('id')) {
@@ -124,7 +124,7 @@ class CI_Controller
 			$this->data['app_name'] = "E-TANHOR";
 		}
 
-		if (!$this->session->userdata('id') && $this->router->class != "auth") {
+		if (!$this->session->userdata('id') && $this->router->class != "auth" && !$this->input->is_ajax_request()) {
 			$this->session->set_flashdata('message', '
 		    <div class="alert alert-warning" role="alert">
 		        Please login first!

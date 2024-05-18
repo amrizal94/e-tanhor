@@ -7,7 +7,7 @@ class Auth extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ($this->session->userdata('id') && $this->router->method != 'logout') {
+        if ($this->session->userdata('id') && $this->router->method != 'logout' && !$this->input->is_ajax_request()) {
             redirect('dasboard');
         }
     }
@@ -17,6 +17,16 @@ class Auth extends CI_Controller
         $this->form_validation->set_rules('username', 'Username', 'required|trim');
         $this->form_validation->set_rules('password', 'Password', 'required|trim');
         if ($this->form_validation->run() == false) {
+            if ($this->input->is_ajax_request()) {
+                $response = [
+                    'error' => [
+                        'username' => form_error('username'),
+                        'password' => form_error('password'),
+                    ]
+                ];
+                echo json_encode($response);
+                return false;
+            }
             $this->data['title'] = 'Login';
             $this->load->view('templates/auth_header', $this->data);
             $this->load->view('auth/login');
@@ -32,6 +42,15 @@ class Auth extends CI_Controller
             ])->row_array();
 
             if (!$user) {
+                if ($this->input->is_ajax_request()) {
+                    $response = [
+                        'error' => [
+                            'username' => "Username not registered!",
+                        ]
+                    ];
+                    echo json_encode($response);
+                    return false;
+                }
                 $this->session->set_flashdata('message', '
                 <div class="alert alert-danger" role="alert">
                     Username not registered!
@@ -39,6 +58,15 @@ class Auth extends CI_Controller
                 redirect('auth');
             }
             if ($user['is_active'] == 0) {
+                if ($this->input->is_ajax_request()) {
+                    $response = [
+                        'error' => [
+                            'username' => "your account is inactive!",
+                        ]
+                    ];
+                    echo json_encode($response);
+                    return false;
+                }
                 $this->session->set_flashdata('username', $input['username']);
                 $this->session->set_flashdata('message', '
                 <div class="alert alert-warning" role="alert">
@@ -47,6 +75,15 @@ class Auth extends CI_Controller
                 redirect('auth');
             }
             if (!password_verify($input['password'], $user['password'])) {
+                if ($this->input->is_ajax_request()) {
+                    $response = [
+                        'error' => [
+                            'password' => "Wrong password!",
+                        ]
+                    ];
+                    echo json_encode($response);
+                    return false;
+                }
                 $this->session->set_flashdata('username', $input['username']);
                 $this->session->set_flashdata('message', '
                 <div class="alert alert-danger" role="alert">
@@ -60,6 +97,14 @@ class Auth extends CI_Controller
             $this->session->set_userdata([
                 'id' => $user['id']
             ]);
+            if ($this->input->is_ajax_request()) {
+                $this->session->set_userdata(['expired' => time() + $this->data['extra_time']]);
+                $response = [
+                    'status' => 200
+                ];
+                echo json_encode($response);
+                return false;
+            }
             if ($this->session->userdata('last_url')) {
                 redirect($this->session->userdata('last_url'));
             }
@@ -69,7 +114,7 @@ class Auth extends CI_Controller
 
     public function register()
     {
-        $this->form_validation->set_rules('username', 'Username', 'required|trim|is_unique[user.username]');
+        $this->form_validation->set_rules('username', 'Username', 'required|trim|is_unique[user.username]', ['is_unique' => "{field} has been registered"]);
         $this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[3]|matches[repassword]', [
             'matches' => 'The Password field does not match',
             'min_lenght' => 'The Password too short'
@@ -77,7 +122,7 @@ class Auth extends CI_Controller
         $this->form_validation->set_rules('repassword', 'Repeat Password', 'matches[password]');
         if ($this->form_validation->run()) {
             $username = htmlspecialchars($this->input->post('username', true));
-            $data = [
+            $this->data = [
                 'username' => $username,
                 'password' => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
             ];
@@ -88,7 +133,7 @@ class Auth extends CI_Controller
                 'created_at' => date("Y-m-d H:i:s", now())
             ];
             $this->db->insert('user_token', $user_token);
-            $this->db->insert('user', $data);
+            $this->db->insert('user', $this->data);
             $this->_sendEmail($token, 'activate');
             $this->session->set_flashdata('message', '
             <div class="alert alert-success" role="alert">
@@ -97,7 +142,7 @@ class Auth extends CI_Controller
             redirect('auth');
         }
         $this->data['title'] = 'Register';
-        $this->load->view('templates/auth_header', $data);
+        $this->load->view('templates/auth_header', $this->data);
         $this->load->view('auth/register');
         $this->load->view('templates/auth_footer');
     }

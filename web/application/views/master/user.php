@@ -29,9 +29,8 @@
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Data <?= $sub_title; ?></h6>
     </div>
-    <div class="card-body view-table">
-
-    </div>
+    <div class="card-body view-table"></div>
+    <div class="card-body view-modal-relog"></div>
 </div>
 <script>
     function listUsers() {
@@ -57,12 +56,13 @@
                 success: function(response) {
                     if (response.data == "reload") {
                         window.location.reload();
+                        return true
                     }
                     $(".view-modal").html(response.data).show();
-                    $("#modal-add-user").modal('show');
+                    $("#modal-add-user").modal();
                 },
                 error: function(xhr, ajaxOptions, throwError) {
-                    alert(xhr.status + "\n" + ajaxOptions + "\n" + throwError);
+                    alert(xhr.status + "\n" + ajaxOptions + "\n" + throwError + "\n" + xhr.responseText);
                 },
             });
 
